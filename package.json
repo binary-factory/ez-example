@@ -1,0 +1,14 @@
+{
+  "name": "@binary-factory/ez-example",
+  "description": "A example usage of the ez-http.",
+  "license": "MIT",
+  "version": "0.0.1",
+  "repository": "https://github.com/binary-factory/ez-bodyparser.git",
+  "main": "./dist/main.js",
+  "types": "./dist/main.d.ts",
+  "devDependencies": {
+    "@types/node": "^6.0.86",
+    "typescript": "^2.4.2"
+  },
+  "dependencies": {}
+}
