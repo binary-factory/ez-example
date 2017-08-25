@@ -11,7 +11,7 @@ import {
     get,
     Type
 } from '@binary-factory/ez-http';
-import { Container } from 'inversify';
+import * as inversify from 'inversify';
 
 const routerPlugin = new EzRouterPlugin();
 EzPluginManager.registerPlugin(routerPlugin).then(() => {
@@ -20,7 +20,7 @@ EzPluginManager.registerPlugin(routerPlugin).then(() => {
 
 
 const router = new EzRouter();
-router.get( '/',() => {
+router.get('/', () => {
     console.log('root');
 });
 
@@ -42,9 +42,8 @@ class Test implements Controller {
 }
 
 // set up container
-let container = new Container();
-
+let container = new inversify.Container();
 // note that you *must* bind your controllers to Controller
 container.bind<Controller>(Type.Controller).to(Test).whenTargetNamed('TestController');
 
-server.registerContainer(<any>container);
+server.registerContainer(container);
