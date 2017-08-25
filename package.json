@@ -10,5 +10,8 @@
     "@types/node": "^6.0.86",
     "typescript": "^2.4.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "inversify": "^4.3.0",
+    "reflect-metadata": "^0.1.10"
+  }
 }
