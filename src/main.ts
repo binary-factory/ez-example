@@ -21,7 +21,6 @@ EzPluginManager.registerPlugin(routerPlugin).then(() => {
     console.log(EzPluginManager.plugins);
 });
 
-
 const router = new EzRouter();
 router.get('/', () => {
     console.log('root');
@@ -30,7 +29,6 @@ router.get('/', () => {
 const server = new EzServer();
 server.use(router);
 server.listen(8080).then(() => console.log(`server on da line: ${server.server.address().port}`));
-
 
 @injectable()
 @controller('/test')
