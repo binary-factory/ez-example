@@ -1,17 +1,20 @@
 import 'reflect-metadata';
 
 import {
+    context,
     controller,
-    Controller,
     EzContext,
+    EzController,
     EzPluginManager,
     EzRouter,
     EzRouterPlugin,
     EzServer,
     get,
-    Type
+    MiddlewareAction,
+    param,
+    query,
 } from '@binary-factory/ez-http';
-import * as inversify from 'inversify';
+import { Container, injectable } from 'inversify';
 
 const routerPlugin = new EzRouterPlugin();
 EzPluginManager.registerPlugin(routerPlugin).then(() => {
@@ -26,24 +29,40 @@ router.get('/', () => {
 
 const server = new EzServer();
 server.use(router);
-server.listen(8080);
+server.listen(8080).then(() => console.log(`server on da line: ${server.server.address().port}`));
 
 
+@injectable()
 @controller('/test')
-class Test implements Controller {
+class Test {
     constructor() {
         console.log('test created.');
     }
 
-    @get()
-    test(context: EzContext) {
-        context.json({ status: 'ok' });
+    @get('/:id')
+    test(@context() context: EzContext,
+         @param('id') id: string,
+         @query('test') test: string) {
+
+        context.json({
+            id,
+            test
+        });
+
+        return MiddlewareAction.SkipHolder;
     }
 }
 
-// set up container
-let container = new inversify.Container();
-// note that you *must* bind your controllers to Controller
-container.bind<Controller>(Type.Controller).to(Test).whenTargetNamed('TestController');
+const Type = {
+    Controller: Symbol('ezController')
+};
 
-server.registerContainer(container);
+// set up container
+let container = new Container();
+container
+    .bind<EzController>(Type.Controller)
+    .to(Test)
+    .whenTargetNamed('TestController');
+
+const controllers: EzController[] = container.getAll<EzController>(Type.Controller);
+server.registerControllers(controllers);
